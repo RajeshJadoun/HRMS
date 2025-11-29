@@ -30,7 +30,7 @@ async function loadRequirements() {
     const list = data.data || [];
 
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7">No requirements found (Cannot read data in no-cors mode).</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7">No requirements found.</td></tr>';
       return;
     }
 
