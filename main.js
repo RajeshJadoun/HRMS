@@ -1,5 +1,5 @@
 // Yahan apna Apps Script Web App URL daalo:
-const API_URL = 'https://script.google.com/macros/s/XXXXX/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbx3D8ieXve1wKZ_LeJ9yLIrXAnd7hj80elZjZjDLH5bH9YkDJ_PDXfOYEAJsr5RZQgf/exec';
 
 // Generic API call helper
 async function callApi(payload) {
