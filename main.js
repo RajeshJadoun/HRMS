@@ -9,8 +9,8 @@ async function callApi(payload) {
       'Content-Type': 'application/json'
     },
     // IMPORTANT:
-//  mode: 'no-cors',  // <- agar ye karoge to response bilkul nahi milega
-    mode: 'cors'       // <- yahi rakhna hoga agar tumhe server ka JSON / status check karna hai
+  mode: 'no-cors',  // <- agar ye karoge to response bilkul nahi milega
+   // mode: 'cors'       // <- yahi rakhna hoga agar tumhe server ka JSON / status check karna hai
   });
 
   // no-cors me yahan res.ok, res.status, res.json sab access NHI hoga.
