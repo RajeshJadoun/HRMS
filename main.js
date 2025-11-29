@@ -5,23 +5,12 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbx3D8ieXve1wKZ_LeJ9yLIr
 async function callApi(payload) {
   const res = await fetch(API_URL, {
     method: 'POST',
+    mode: 'no-cors'
     headers: {
       'Content-Type': 'application/json'
     },
-    // IMPORTANT:
-  mode: 'no-cors',  // <- agar ye karoge to response bilkul nahi milega
-   // mode: 'cors'       // <- yahi rakhna hoga agar tumhe server ka JSON / status check karna hai
-  });
-
-  // no-cors me yahan res.ok, res.status, res.json sab access NHI hoga.
-  // isliye hum cors use kar rahe hain.
-  if (!res.ok) {
-    throw new Error('HTTP error ' + res.status);
-  }
-
-  const data = await res.json();
-
-  if (!data.success) {
+   
+    if (!data.success) {
     throw new Error(data.error || 'Unknown server error');
   }
 
