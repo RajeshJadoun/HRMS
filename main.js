@@ -3,18 +3,19 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbx3D8ieXve1wKZ_LeJ9yLIr
 
 // Generic API call helper
 async function callApi(payload) {
-  const res = await fetch(API_URL, {
+  // Aapki request: mode 'no-cors' aur response check nahi karna
+  await fetch(API_URL, {
     method: 'POST',
-    mode: 'no-cors'
+    mode: 'no-cors', 
     headers: {
       'Content-Type': 'application/json'
     },
-   
-    if (!data.success) {
-    throw new Error(data.error || 'Unknown server error');
-  }
+    body: JSON.stringify(payload) // Data bhejna zaroori hai
+  });
 
-  return data;
+  // Kyunki hum response read nahi kar sakte (no-cors), 
+  // hum ek dummy empty object return kar rahe hain taaki code crash na ho.
+  return { success: true, data: [] };
 }
 
 // -------- Requirements --------
@@ -24,11 +25,12 @@ async function loadRequirements() {
   tbody.innerHTML = '<tr><td colspan="7">Loading...</td></tr>';
 
   try {
+    // Data fetch call (lekin no-cors ki wajah se data khali aayega)
     const data = await callApi({ action: 'listRequirements' });
     const list = data.data || [];
 
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7">No requirements found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7">No requirements found (Cannot read data in no-cors mode).</td></tr>';
       return;
     }
 
@@ -57,7 +59,7 @@ async function submitRequirementForm(e) {
   e.preventDefault();
   const form = e.target;
   const msg = document.getElementById('reqMessage');
-  msg.textContent = 'Saving...';
+  msg.textContent = 'Sending data...';
 
   const payload = {
     action: 'createRequirement',
@@ -67,12 +69,14 @@ async function submitRequirementForm(e) {
   };
 
   try {
-    const data = await callApi(payload);
-    msg.textContent = 'Requirement created: ' + data.data.job_id;
+    await callApi(payload);
+    // Response check nahi kar rahe, bas success maan rahe hain
+    msg.textContent = 'Request Sent (Blind Mode)';
     msg.classList.remove('text-danger');
     msg.classList.add('text-success');
     form.reset();
-    loadRequirements();
+    // loadRequirements call karne ka faayda nahi kyunki read nahi hoga, par flow ke liye rakha hai
+    loadRequirements(); 
   } catch (err) {
     msg.textContent = err.message;
     msg.classList.remove('text-success');
@@ -100,7 +104,7 @@ async function loadCandidates() {
     const list = data.data || [];
 
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7">No candidates found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7">No candidates found (Cannot read data in no-cors mode).</td></tr>';
       return;
     }
 
@@ -129,7 +133,7 @@ async function submitCandidateForm(e) {
   e.preventDefault();
   const form = e.target;
   const msg = document.getElementById('candMessage');
-  msg.textContent = 'Saving...';
+  msg.textContent = 'Sending data...';
 
   const payload = {
     action: 'createCandidate',
@@ -140,8 +144,8 @@ async function submitCandidateForm(e) {
   };
 
   try {
-    const data = await callApi(payload);
-    msg.textContent = 'Candidate added: ID ' + data.data.id;
+    await callApi(payload);
+    msg.textContent = 'Request Sent (Blind Mode)';
     msg.classList.remove('text-danger');
     msg.classList.add('text-success');
     form.reset();
